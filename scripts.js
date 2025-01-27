@@ -100,6 +100,26 @@ checkButton.addEventListener("click", async () => {
       });
       resultsDiv.appendChild(workingList);
     }
+
+    // New section to display broken links
+    if (brokenLinks.length > 0) {
+      const brokenTitle = document.createElement("h2");
+      brokenTitle.textContent = "Broken Links";
+      resultsDiv.appendChild(brokenTitle);
+
+      const brokenList = document.createElement("div");
+      brokenList.className = "link-list";
+      brokenLinks.forEach((link) => {
+        const linkDiv = document.createElement("div");
+        linkDiv.className = "link-item broken";
+        linkDiv.innerHTML = `
+                    <div class="link-url">${link}</div>
+                    <div class="link-text">Link is broken</div>
+                `;
+        brokenList.appendChild(linkDiv);
+      });
+      resultsDiv.appendChild(brokenList);
+    }
   } catch (error) {
     resultsDiv.innerHTML = `<div style="color: red;">Error: ${error.message}</div>`;
   } finally {
