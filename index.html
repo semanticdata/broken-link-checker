@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broken Link Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Broken Link Checker</h1>
+
+        <div class="input-group">
+            <input type="url" id="urlInput" placeholder="Enter website URL (e.g., https://www.example.com)" required>
+            <button id="checkButton">Check Links</button>
+        </div>
+
+        <div id="loading" class="loading">
+            Checking links... This may take a few minutes depending on the website size.
+        </div>
+
+        <div id="results" class="results"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+
+</html>
