@@ -1,3 +1,9 @@
+.mock-data-toggle {
+  text-align: right;
+  /* Comment out line below to show the mock data toggle */
+  display: none;
+}
+
 * {
   margin: 0;
   padding: 0;

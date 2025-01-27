@@ -2,6 +2,30 @@ const urlInput = document.getElementById("urlInput");
 const checkButton = document.getElementById("checkButton");
 const loadingDiv = document.getElementById("loading");
 const resultsDiv = document.getElementById("results");
+const mockDataToggle = document.getElementById("mockDataToggle");
+
+// Mock data for testing
+const mockUrls = [
+  "https://www.example.com",
+  "https://www.nonexistentwebsite.com",
+  "https://www.google.com",
+];
+
+function mockCheckLinks() {
+  // Simulate checking links with mock data
+  const workingLinks = [];
+  const brokenLinks = [];
+
+  mockUrls.forEach((link) => {
+    if (link === "https://www.nonexistentwebsite.com") {
+      brokenLinks.push(link);
+    } else {
+      workingLinks.push({ url: link, text: "Link is reachable" });
+    }
+  });
+
+  return { workingLinks, brokenLinks };
+}
 
 checkButton.addEventListener("click", async () => {
   const url = urlInput.value.trim();
@@ -17,25 +41,34 @@ checkButton.addEventListener("click", async () => {
   checkButton.disabled = true;
 
   try {
-    // Fetch the content of the provided URL
-    const response = await axios.get(url);
-    const htmlContent = response.data;
+    let workingLinks, brokenLinks;
 
-    // Extract URLs from the HTML content
-    const urls = extractUrls(htmlContent, url);
+    if (mockDataToggle.checked) {
+      // Use mock data instead
+      ({ workingLinks, brokenLinks } = mockCheckLinks());
+    } else {
+      // Fetch the content of the provided URL
+      const response = await axios.get(url);
+      const htmlContent = response.data;
 
-    // Check reachability of each URL
-    const workingLinks = [];
-    const brokenLinks = [];
+      // Extract URLs from the HTML content
+      const urls = extractUrls(htmlContent, url);
 
-    for (const link of urls) {
-      try {
-        await axios.get(link);
-        workingLinks.push({ url: link, text: "Link is reachable" });
-      } catch (error) {
-        brokenLinks.push(link);
+      // Check reachability of each URL
+      workingLinks = [];
+      brokenLinks = [];
+
+      for (const link of urls) {
+        try {
+          await axios.get(link);
+          workingLinks.push({ url: link, text: "Link is reachable" });
+        } catch (error) {
+          brokenLinks.push(link);
+        }
       }
     }
+
+    const urls = mockDataToggle.checked ? mockUrls : []; // Use mock URLs for summary if mock data is checked
 
     // Create summary
     const summary = document.createElement("div");
