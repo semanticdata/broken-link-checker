@@ -22,7 +22,7 @@ checkButton.addEventListener("click", async () => {
     const htmlContent = response.data;
 
     // Extract URLs from the HTML content
-    const urls = extractUrls(htmlContent);
+    const urls = extractUrls(htmlContent, url);
 
     // Check reachability of each URL
     const workingLinks = [];
@@ -75,20 +75,25 @@ checkButton.addEventListener("click", async () => {
   }
 });
 
-function extractUrls(html) {
+function extractUrls(html, baseUrl) {
   console.log("Extracting URLs from HTML content...");
-  console.log("HTML content before regex:", html);
+  // console.log("HTML content before regex:", html);
 
   const urlRegex = /href="(http[s]?:\/\/[^"]+|\/[^"]+)"/g;
   const urls = [];
   let match;
   while ((match = urlRegex.exec(html)) !== null) {
-    console.log(`Found URL: ${match[1]}`);
-    urls.push(match[1]);
+    let url = match[1];
+    // Convert relative URLs to absolute URLs
+    if (url.startsWith("/")) {
+      url = new URL(url, baseUrl).href; // Create absolute URL
+    }
+    console.log(`Found URL: ${url}`);
+    urls.push(url);
   }
 
   console.log(`Total URLs extracted: ${urls.length}`);
-  console.log("HTML content after regex:", html);
+  // console.log("HTML content after regex:", html);
 
   return urls;
 }
